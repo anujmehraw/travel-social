@@ -1,73 +1,58 @@
 
-import { useState } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import Home from "./pages/Home";
+import Discover from "./pages/Discover";
+import Communities from "./pages/Communities";
+import Chats from "./pages/Chats";
+import Notifications from "./pages/Notifications";
+import Profile from "./pages/Profile";
+import Saved from "./pages/Saved";
+import CommunityPage from "./pages/CommunityPage";
 
-const navItems = [
-  { name: "Community", icon: "🌍" },
-  { name: "Notifications", icon: "🔔" },
-  { name: "Chats", icon: "💬" },
-  { name: "Profile", icon: "👤" },
-];
-
-function App() {
-  const [activeTab, setActiveTab] = useState("Community");
-
+function NotFound() {
   return (
-    <div className="min-h-screen bg-orange-50 text-gray-800">
-      <nav className="flex items-center justify-between border-b border-orange-100 bg-white px-8 py-4">
-        <h1 className="text-2xl font-bold text-orange-600">
-          Travel<span className="text-gray-800">Social</span>
-        </h1>
-
-        <div className="flex items-center gap-2">
-          {navItems.map((item) => (
-            <button
-              key={item.name}
-              onClick={() => setActiveTab(item.name)}
-              className={`rounded-xl px-4 py-3 text-sm font-medium transition ${
-                activeTab === item.name
-                  ? "bg-orange-100 text-orange-700"
-                  : "text-gray-600 hover:bg-gray-100"
-              }`}
-            >
-              <span className="mr-2">{item.icon}</span>
-              {item.name}
-            </button>
-          ))}
-        </div>
-      </nav>
-
-      <main className="mx-auto max-w-5xl px-6 py-20">
-        <p className="mb-4 text-sm font-bold tracking-widest text-orange-600">
-          YOUR NEXT ADVENTURE STARTS HERE
-        </p>
-
-        <h2 className="text-5xl font-bold leading-tight">
-          The world is better
-          <br />
-          <span className="text-orange-600">when shared.</span>
-        </h2>
-
-        <p className="mt-6 max-w-xl text-lg leading-8 text-gray-600">
-          Meet fellow travelers, discover hidden gems, and
-          share the stories behind every journey.
-        </p>
-
-        <div className="mt-12 rounded-2xl border border-orange-100 bg-white p-8 shadow-sm">
-          <p className="text-xs font-bold tracking-widest text-orange-600">
-            YOUR TRAVEL COMMUNITY
-          </p>
-
-          <h3 className="mt-4 text-2xl font-bold">{activeTab}</h3>
-
-          <p className="mt-2 text-gray-600">
-            {activeTab === "Community"
-              ? "Find your people, discover places, and plan your next adventure."
-              : `Your ${activeTab.toLowerCase()} space will appear here.`}
-          </p>
-        </div>
-      </main>
-    </div>
+    <main className="mx-auto max-w-xl px-5 py-24 text-center">
+      <h1 className="text-3xl font-semibold text-stone-900">
+        Page not found
+      </h1>
+      <p className="mt-3 text-stone-500">
+        This page doesn't exist yet.
+      </p>
+      <a
+        href="/"
+        className="mt-6 inline-block rounded-xl bg-orange-800 px-5 py-3 text-sm font-medium text-white"
+      >
+        Return home
+      </a>
+    </main>
   );
 }
 
-export default App;
+export default function App() {
+  return (
+    <BrowserRouter>
+      <div className="min-h-screen bg-[#faf9f6]">
+        <Navbar />
+
+        <div className="min-w-0 lg:ml-64">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/discover" element={<Discover />} />
+            <Route path="/communities" element={<Communities />} />
+            <Route path="/chats" element={<Chats />} />
+            <Route path="/notifications" element={<Notifications />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/saved" element={<Saved />} />
+            <Route path="/communities/:slug" element={<CommunityPage />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+
+          <footer className="mt-10 border-t border-stone-200 bg-white px-6 py-5 text-sm text-stone-500">
+            Travel Social · Discover places. Share experiences. Travel together.
+          </footer>
+        </div>
+      </div>
+    </BrowserRouter>
+  );
+}
