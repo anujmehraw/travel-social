@@ -2,8 +2,45 @@
 import { MapPin, CalendarDays, Camera } from "lucide-react";
 import { posts } from "../data";
 import PostCard from "../components/PostCard";
+import { useAuth } from "../AuthContext";
 
 export default function Profile() {
+  const { user } = useAuth();
+  const metadata = user?.user_metadata ?? {};
+  const fullName =
+    typeof metadata.full_name === "string" && metadata.full_name.trim()
+      ? metadata.full_name
+      : user?.email?.split("@")[0] ?? "Traveler";
+  const username =
+    typeof metadata.username === "string" && metadata.username.trim()
+      ? metadata.username
+      : fullName.toLowerCase().replace(/[^a-z0-9]+/g, "");
+  const location =
+    typeof metadata.location === "string" && metadata.location.trim()
+      ? metadata.location
+      : "Add your location";
+  const bio =
+    typeof metadata.bio === "string" && metadata.bio.trim()
+      ? metadata.bio
+      : "Share a little about yourself and the places you love to explore.";
+  const interests = Array.isArray(metadata.interests)
+    ? metadata.interests.filter(
+        (interest): interest is string => typeof interest === "string"
+      )
+    : [];
+  const initials = fullName
+    .split(/\s+/)
+    .map((part) => part[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+  const joinedDate = user?.created_at
+    ? new Date(user.created_at).toLocaleDateString(undefined, {
+        month: "long",
+        year: "numeric",
+      })
+    : "Recently";
+
   return (
     <main className="mx-auto max-w-5xl px-4 py-8 sm:px-6">
       <section className="overflow-hidden rounded-2xl border border-stone-200 bg-white">
@@ -16,27 +53,35 @@ export default function Profile() {
         <div className="px-5 pb-6 sm:px-8">
           <div className="-mt-12 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div className="flex h-24 w-24 items-center justify-center rounded-full border-4 border-white bg-orange-100 text-3xl font-semibold text-orange-900">
-              AM
+              {initials}
             </div>
-            <button
-              onClick={() => window.alert("Profile editing will be added in a later step.")}
-              className="rounded-xl border border-stone-300 px-4 py-2.5 text-sm font-medium text-stone-700 hover:bg-stone-50"
-            >
-              Edit profile
-            </button>
           </div>
 
-          <h1 className="mt-4 text-2xl font-semibold text-stone-900">Anuj Mehra</h1>
-          <p className="mt-1 text-sm text-stone-500">@anujtravels</p>
-          <p className="mt-4 max-w-2xl leading-7 text-stone-600">
-            Exploring new places, finding local food, and learning the stories
-            behind every destination.
-          </p>
+          <h1 className="mt-4 text-2xl font-semibold text-stone-900">{fullName}</h1>
+          <p className="mt-1 text-sm text-stone-500">@{username}</p>
+          <p className="mt-4 max-w-2xl leading-7 text-stone-600">{bio}</p>
 
           <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm text-stone-500">
-            <span className="flex items-center gap-1.5"><MapPin size={16} /> Bhopal, India</span>
-            <span className="flex items-center gap-1.5"><CalendarDays size={16} /> Joined recently</span>
+            <span className="flex items-center gap-1.5">
+              <MapPin size={16} /> {location}
+            </span>
+            <span className="flex items-center gap-1.5">
+              <CalendarDays size={16} /> Joined {joinedDate}
+            </span>
           </div>
+
+          {interests.length > 0 && (
+            <div className="mt-5 flex flex-wrap gap-2">
+              {interests.map((interest) => (
+                <span
+                  key={interest}
+                  className="rounded-full bg-orange-50 px-3 py-1 text-sm text-orange-900"
+                >
+                  {interest}
+                </span>
+              ))}
+            </div>
+          )}
 
           <div className="mt-6 grid grid-cols-3 border-t border-stone-100 pt-5 text-center">
             <div><p className="text-xl font-semibold text-stone-900">3</p><p className="mt-1 text-xs text-stone-500">Stories</p></div>

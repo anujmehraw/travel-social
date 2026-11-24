@@ -1,5 +1,8 @@
 
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Outlet } from "react-router-dom";
+
+import { AuthProvider } from "./AuthContext";
+import ProtectedRoute from "./ProtectedRoute";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import Discover from "./pages/Discover";
@@ -9,6 +12,8 @@ import Notifications from "./pages/Notifications";
 import Profile from "./pages/Profile";
 import Saved from "./pages/Saved";
 import CommunityPage from "./pages/CommunityPage";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 
 function NotFound() {
   return (
@@ -29,30 +34,51 @@ function NotFound() {
   );
 }
 
+// Layout for authenticated users
+function AppLayout() {
+  return (
+    <div className="min-h-screen bg-[#faf9f6]">
+      <Navbar />
+
+      <div className="min-w-0 lg:ml-64">
+        <Outlet />
+
+        <footer className="mt-10 border-t border-stone-200 bg-white px-6 py-5 text-sm text-stone-500">
+          Travel Social · Discover places. Share experiences. Travel together.
+        </footer>
+      </div>
+    </div>
+  );
+}
+
 export default function App() {
   return (
     <BrowserRouter>
-      <div className="min-h-screen bg-[#faf9f6]">
-        <Navbar />
+      <AuthProvider>
+        <Routes>
 
-        <div className="min-w-0 lg:ml-64">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/discover" element={<Discover />} />
-            <Route path="/communities" element={<Communities />} />
-            <Route path="/chats" element={<Chats />} />
-            <Route path="/notifications" element={<Notifications />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/saved" element={<Saved />} />
-            <Route path="/communities/:slug" element={<CommunityPage />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+          {/* Public route */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
 
-          <footer className="mt-10 border-t border-stone-200 bg-white px-6 py-5 text-sm text-stone-500">
-            Travel Social · Discover places. Share experiences. Travel together.
-          </footer>
-        </div>
-      </div>
+          {/* Protected routes */}
+          <Route element={<ProtectedRoute />}>
+            <Route element={<AppLayout />}>
+              <Route path="/" element={<Home />} />
+              <Route path="/discover" element={<Discover />} />
+              <Route path="/communities" element={<Communities />} />
+              <Route path="/chats" element={<Chats />} />
+              <Route path="/notifications" element={<Notifications />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/saved" element={<Saved />} />
+              <Route path="/communities/:slug" element={<CommunityPage />} />
+            </Route>
+          </Route>
+
+          <Route path="*" element={<NotFound />} />
+
+        </Routes>
+      </AuthProvider>
     </BrowserRouter>
   );
 }
