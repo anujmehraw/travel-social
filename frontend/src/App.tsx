@@ -7,6 +7,8 @@ import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import Discover from "./pages/Discover";
 import Communities from "./pages/Communities";
+import Rooms from "./pages/Rooms";
+import RoomPage from "./pages/RoomPage";
 import Chats from "./pages/Chats";
 import Notifications from "./pages/Notifications";
 import Profile from "./pages/Profile";
@@ -37,14 +39,16 @@ function NotFound() {
 // Layout for authenticated users
 function AppLayout() {
   return (
-    <div className="min-h-screen bg-[#faf9f6]">
+    <div className="min-h-screen bg-[#f7f5ef]">
       <Navbar />
 
-      <div className="min-w-0 lg:ml-64">
+      <div className="min-w-0 lg:ml-60">
         <Outlet />
 
-        <footer className="mt-10 border-t border-stone-200 bg-white px-6 py-5 text-sm text-stone-500">
-          Travel Social · Discover places. Share experiences. Travel together.
+        <footer className="mt-12 border-t border-[#dedbd3] px-6 py-6 text-xs text-stone-500 sm:px-8">
+          <div className="mx-auto max-w-6xl">
+            Travel Social <span className="mx-2 text-stone-300">/</span> Discover places. Share experiences. Travel together.
+          </div>
         </footer>
       </div>
     </div>
@@ -67,9 +71,12 @@ export default function App() {
               <Route path="/" element={<Home />} />
               <Route path="/discover" element={<Discover />} />
               <Route path="/communities" element={<Communities />} />
+              <Route path="/rooms" element={<Rooms />} />
+              <Route path="/rooms/:roomId" element={<RoomPage />} />
               <Route path="/chats" element={<Chats />} />
               <Route path="/notifications" element={<Notifications />} />
               <Route path="/profile" element={<Profile />} />
+              <Route path="/profile/:userId" element={<Profile />} />
               <Route path="/saved" element={<Saved />} />
               <Route path="/communities/:slug" element={<CommunityPage />} />
             </Route>

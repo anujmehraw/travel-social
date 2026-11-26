@@ -1,11 +1,44 @@
-
+import { useCallback, useEffect, useState } from "react";
 import { Bookmark } from "lucide-react";
-import { posts } from "../data";
+import type { Post } from "../data";
 import PostCard from "../components/PostCard";
+import { apiRequest } from "../lib/api";
 
 export default function Saved() {
-  // Demo-only saved list. Persistent saving will be implemented later.
-  const savedPosts = posts.filter((post) => post.id !== 2);
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  const loadSavedPosts = useCallback(async () => {
+    try {
+      setPosts(await apiRequest<Post[]>("/api/saved-posts"));
+      setError("");
+    } catch (failure) {
+      setError(failure instanceof Error ? failure.message : "Could not load saved stories.");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    let active = true;
+    apiRequest<Post[]>("/api/saved-posts")
+      .then((loaded) => {
+        if (active) {
+          setPosts(loaded);
+          setError("");
+        }
+      })
+      .catch((failure: unknown) => {
+        if (active) setError(failure instanceof Error ? failure.message : "Could not load saved stories.");
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
 
   return (
     <main className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
@@ -15,20 +48,20 @@ export default function Saved() {
         </span>
         <div>
           <h1 className="text-3xl font-semibold text-stone-900">Saved stories</h1>
-          <p className="mt-1 text-sm text-stone-500">
-            Keep useful guides and places close at hand.
-          </p>
+          <p className="mt-1 text-sm text-stone-500">Keep useful guides and places close at hand.</p>
         </div>
       </div>
 
+      {error && <p role="alert" className="mt-6 rounded-xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-800">{error}</p>}
       <div className="mt-7 space-y-6">
-        {savedPosts.map((post) => <PostCard key={post.id} post={post} />)}
+        {loading ? (
+          <p className="rounded-2xl border border-stone-200 bg-white p-8 text-center text-stone-500">Loading saved stories...</p>
+        ) : posts.length ? (
+          posts.map((post) => <PostCard key={post.id} post={post} onChanged={() => void loadSavedPosts()} />)
+        ) : (
+          <p className="rounded-2xl border border-stone-200 bg-white p-8 text-center text-stone-500">Saved stories will appear here.</p>
+        )}
       </div>
-
-      <p className="mt-5 text-xs leading-5 text-stone-400">
-        This page currently uses sample saved posts. Saving and unsaving across pages
-        will need shared state or database persistence.
-      </p>
     </main>
   );
 }

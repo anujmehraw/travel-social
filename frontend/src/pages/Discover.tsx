@@ -1,5 +1,6 @@
 
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Search, MapPin } from "lucide-react";
 import { destinations } from "../data";
 
@@ -67,14 +68,12 @@ export default function Discover() {
                 <p className="mt-1 flex items-center gap-1.5 text-sm text-stone-500">
                   <MapPin size={15} /> {destination.region}
                 </p>
-                <button
-                  onClick={() =>
-                    window.alert(`More guides for ${destination.name} will appear here.`)
-                  }
-                  className="mt-4 text-sm font-semibold text-orange-800 hover:text-orange-900"
+                <Link
+                  to={`/rooms?destination=${encodeURIComponent(destination.name)}`}
+                  className="mt-4 inline-block text-sm font-semibold text-orange-800 hover:text-orange-900"
                 >
                   Explore destination →
-                </button>
+                </Link>
               </div>
             </article>
           ))}

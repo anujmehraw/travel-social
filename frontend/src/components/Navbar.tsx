@@ -9,6 +9,7 @@ import {
   Bookmark,
   UserRound,
   Map,
+  Plane,
   Menu,
   X,
 } from "lucide-react";
@@ -19,6 +20,7 @@ const mainLinks = [
   { label: "Home", to: "/", icon: House },
   { label: "Discover", to: "/discover", icon: Compass },
   { label: "Communities", to: "/communities", icon: Users },
+  { label: "Travel rooms", to: "/rooms", icon: Plane },
   { label: "Chats", to: "/chats", icon: MessageCircle },
   { label: "Notifications", to: "/notifications", icon: Bell },
 ];
@@ -36,13 +38,13 @@ export default function Navbar() {
       <NavLink
         to="/"
         onClick={() => setMobileOpen(false)}
-        className="mb-7 flex items-center gap-3 px-2"
+        className="mb-8 flex items-center gap-3 px-1"
       >
-        <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-orange-800 text-white">
-          <Map size={22} />
+        <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#26322f] text-[#f7f5ef]">
+          <Map size={19} />
         </span>
-        <span className="text-xl font-bold tracking-tight text-stone-900">
-          travel<span className="text-orange-800">social</span>
+        <span className="editorial-title text-xl font-bold text-stone-900">
+          travel <span className="text-[#a44f38]">social</span>
         </span>
       </NavLink>
 
@@ -58,10 +60,10 @@ export default function Navbar() {
             end={to === "/"}
             onClick={() => setMobileOpen(false)}
             className={({ isActive }) =>
-              `flex items-center gap-3 rounded-xl px-3 py-3 text-sm transition ${
+              `flex items-center gap-3 border-l-2 px-3 py-2.5 text-sm transition ${
                 isActive
-                  ? "bg-orange-50 font-semibold text-orange-900"
-                  : "text-stone-600 hover:bg-stone-100 hover:text-stone-900"
+                  ? "border-[#a44f38] font-semibold text-[#7f3d2e]"
+                  : "border-transparent text-stone-600 hover:border-stone-300 hover:text-stone-900"
               }`
             }
           >
@@ -84,10 +86,10 @@ export default function Navbar() {
             to={to}
             onClick={() => setMobileOpen(false)}
             className={({ isActive }) =>
-              `flex items-center gap-3 rounded-xl px-3 py-3 text-sm transition ${
+              `flex items-center gap-3 border-l-2 px-3 py-2.5 text-sm transition ${
                 isActive
-                  ? "bg-orange-50 font-semibold text-orange-900"
-                  : "text-stone-600 hover:bg-stone-100 hover:text-stone-900"
+                  ? "border-[#a44f38] font-semibold text-[#7f3d2e]"
+                  : "border-transparent text-stone-600 hover:border-stone-300 hover:text-stone-900"
               }`
             }
           >
@@ -97,7 +99,7 @@ export default function Navbar() {
         ))}
       </nav>
 
-      <div className="mt-8 rounded-2xl bg-stone-100 p-4">
+      <div className="mt-8 border-t border-[#dedbd3] pt-5">
         <p className="text-sm font-semibold text-stone-800">
           Know a place well?
         </p>
@@ -121,7 +123,7 @@ export default function Navbar() {
 
   return (
     <>
-      <aside className="fixed inset-y-0 left-0 z-40 hidden w-64 flex-col overflow-y-auto border-r border-stone-200 bg-white px-5 py-6 lg:flex">
+      <aside className="fixed inset-y-0 left-0 z-40 hidden w-60 flex-col overflow-y-auto border-r border-[#dedbd3] bg-[#fbfaf7] px-5 py-6 lg:flex">
         {sidebarContent}
       </aside>
 

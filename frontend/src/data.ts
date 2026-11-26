@@ -1,72 +1,80 @@
 
 export type Post = {
-  id: number;
-  author: string;
-  handle: string;
-  location: string;
-  time: string;
-  title: string;
+  id: string;
+  author_id: string;
   content: string;
-  image: string;
-  likes: number;
-  comments: number;
-  category: string;
+  location: string | null;
+  image_url: string | null;
+  created_at: string;
+  updated_at: string;
+  username: string | null;
+  display_name: string | null;
+  avatar_url: string | null;
+  like_count: number;
+  comment_count: number;
+  liked_by_me: boolean;
+  saved_by_me: boolean;
+};
+
+export type Comment = {
+  id: string;
+  post_id: string;
+  author_id: string;
+  content: string;
+  created_at: string;
+  updated_at: string;
+  username: string | null;
+  display_name: string | null;
+  avatar_url: string | null;
+};
+
+export type TravelRoom = {
+  id: string;
+  creator_id: string;
+  name: string;
+  description: string | null;
+  destination: string | null;
+  start_location: string | null;
+  departure_date: string | null;
+  return_date: string | null;
+  budget: number | null;
+  max_members: number;
+  category: string | null;
+  cover_url: string | null;
+  is_public: boolean;
+  created_at: string;
+  member_count?: number;
+  can_view?: boolean;
+  is_member?: boolean;
+  has_pending_invitation?: boolean;
+  is_creator?: boolean;
 };
 
 export type Community = {
-  id: number;
+  id: number | string;
   slug: string;
   name: string;
   city: string;
-  members: string;
   description: string;
   image: string;
 };
 
-export const posts: Post[] = [
-  {
-    id: 1,
-    author: "Riya Sharma",
-    handle: "riyatravels",
-    location: "Upper Lake, Bhopal",
-    time: "2 hours ago",
-    title: "A quiet evening by the lake",
-    content:
-      "Sometimes the best plans are no plans at all. Walked around Upper Lake just before sunset, and the view was incredible.",
-    image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=85",
-    likes: 124,
-    comments: 18,
-    category: "Local discovery",
-  },
-  {
-    id: 2,
-    author: "Arjun Verma",
-    handle: "arjunontheroad",
-    location: "Manali, Himachal Pradesh",
-    time: "5 hours ago",
-    title: "A weekend in the mountains",
-    content:
-      "Sharing my three-day itinerary, transport costs, and a few quieter spots worth visiting if you want to avoid the crowds.",
-    image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=85",
-    likes: 89,
-    comments: 24,
-    category: "Travel guide",
-  },
-  {
-    id: 3,
-    author: "Meera Kapoor",
-    handle: "meeraexplores",
-    location: "Jaipur, Rajasthan",
-    time: "Yesterday",
-    title: "The old streets of Jaipur",
-    content:
-      "Spent the morning exploring local markets and small cafés. Here are a few places I would recommend to anyone visiting for the first time.",
-    image: "https://images.unsplash.com/photo-1599661046827-dacff0c0f09a?auto=format&fit=crop&w=1200&q=85",
-    likes: 203,
-    comments: 31,
-    category: "City stories",
-  },
-];
+export type CommunityRecord = Omit<Community, "image"> & {
+  creator_id: string;
+  image_url: string | null;
+  created_at: string;
+};
+
+export function toCommunity(record: CommunityRecord): Community {
+  return {
+    id: record.id,
+    slug: record.slug,
+    name: record.name,
+    city: record.city,
+    description: record.description,
+    image: record.image_url ?? "",
+  };
+}
 
 export const communities: Community[] = [
   {
@@ -74,7 +82,6 @@ export const communities: Community[] = [
     slug: "bhopal-community",
     name: "Bhopal Community",
     city: "Bhopal, Madhya Pradesh",
-    members: "2.4k",
     description: "Discover local places, hidden cafés, lakes, and weekend plans.",
     image: "https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=900&q=85",
   },
@@ -83,7 +90,6 @@ export const communities: Community[] = [
     slug: "delhi-travelers",
     name: "Delhi Travelers",
     city: "Delhi, India",
-    members: "8.1k",
     description: "Explore the capital through local experiences and food.",
     image: "https://images.unsplash.com/photo-1587474260584-136574528ed5?auto=format&fit=crop&w=900&q=85",
   },
@@ -92,7 +98,6 @@ export const communities: Community[] = [
     slug: "mountain-explorers",
     name: "Mountain Explorers",
     city: "Himachal Pradesh",
-    members: "5.7k",
     description: "Trekking routes, mountain stays, and practical travel tips.",
     image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=85",
   },
@@ -101,7 +106,6 @@ export const communities: Community[] = [
     slug: "weekend-explorers",
     name: "Weekend Explorers",
     city: "Across India",
-    members: "3.6k",
     description: "Find short trips, travel companions, and nearby escapes.",
     image: "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=900&q=85",
   },
